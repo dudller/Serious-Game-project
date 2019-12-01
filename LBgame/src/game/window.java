@@ -11,15 +11,11 @@ public class window extends JFrame {
         setSize(width,height);
         setLocation(x,y);
         setVisible(true);
-        setLayout(new GridLayout(1,2));
-
-
-
+        setResizable(false);
+        setLayout(new GridLayout(1,1));
 
     }
 
 
-    public void loadImages() {
 
-    }
 }

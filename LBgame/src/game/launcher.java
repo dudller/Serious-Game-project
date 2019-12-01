@@ -15,8 +15,10 @@ public class launcher {
     public static Image[] decorations;
     // ***
     //params
-    static int windowHeight=900;
+    static int windowHeight=800;
     static int windowWidth=1280;
+    static int canvasShift=300;
+    static boolean done =true;
 
 
     public static void main(String[] args) {
@@ -24,10 +26,17 @@ public class launcher {
         int x =(Toolkit.getDefaultToolkit().getScreenSize().width-windowWidth)/2;
         int y =(Toolkit.getDefaultToolkit().getScreenSize().height-windowHeight)/2;
         window gameWindow = new window(windowWidth,windowHeight,x,y);
+        GameScreen gameScreen = new GameScreen(windowWidth+canvasShift,windowHeight);
+
+        gameWindow.add(gameScreen);
+
+        //render loop
+
+        //***
 
     }
     public static void loadImages(){
-        background1=new ImageIcon("images/bg1.jpeg").getImage();
+        background1=new ImageIcon("src/images/bg1.jpg").getImage();
         background2=new ImageIcon("file Name").getImage();
         menuicon=new ImageIcon("file Name").getImage();
         mikser=new ImageIcon("file Name").getImage();

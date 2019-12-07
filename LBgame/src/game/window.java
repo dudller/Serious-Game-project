@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class window extends JFrame {
-
+    public GridBagConstraints cont;
     public window(int width, int height, int x, int y){
         setResizable(false);
 
@@ -12,7 +12,6 @@ public class window extends JFrame {
         setLocation(x,y);
         setVisible(true);
         setResizable(false);
-        setLayout(new GridLayout(1,1));
 
     }
 

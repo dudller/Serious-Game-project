@@ -1,0 +1,11 @@
+eggs
+water
+cocoa
+******
+2
+3
+******
+strawberies
+chocolate stars
+******
+240

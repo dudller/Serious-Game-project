@@ -20,23 +20,25 @@ public class launcher {
     //params
     static int WINDOWHEIGHT=800;
     static int WINDOWWIDTH=1280;
-    static int PANELSHIFT=300;
-    static int DELAY=50;
+    static int PANELSHIFT=300;//jak dużo szerszy jest panel względem okna
+    static int DELAY=50;//opóźnienie renderowania
     static boolean done =true;
     //components
-    Toolkit tool;
+    public Toolkit tool;
+    public Recipe recipe;
 
 
 
 
     public static void main(String[] args) {
         launcher l=new launcher();
+        l.recipe=new Recipe();
         l.loadImages();
         l.tool=Toolkit.getDefaultToolkit();
         int x =(l.tool.getScreenSize().width-WINDOWWIDTH)/2;
         int y =(l.tool.getScreenSize().height-WINDOWHEIGHT)/2;
         window gameWindow = new window(WINDOWWIDTH,WINDOWHEIGHT,x,y);
-        Game game=new Game(WINDOWWIDTH+PANELSHIFT,WINDOWHEIGHT);
+        Game game=new Game(WINDOWWIDTH+PANELSHIFT,WINDOWHEIGHT,l.recipe);
         gameWindow.add(game);
         gameWindow.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         game.start();

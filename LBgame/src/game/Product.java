@@ -13,10 +13,10 @@ public class Product extends Entity {
         super(image, x, y);
         this.name=n;
         this.game=game;
-        //c=tool.createCustomCursor(image.getImage(),new Point(1280,450) , "product");
+        c=tool.createCustomCursor(this.image.getImage().getScaledInstance(32, 32,  java.awt.Image.SCALE_SMOOTH),new Point(15,20) , name);
         this.game.products.add(this);
     }
-    public void setposition(){
+    public void setposition(){//na podstawie pozycji w liście ustawia współrzędne produktu
         int i = game.products.indexOf(this);
         if (i<5){
             x=1285;

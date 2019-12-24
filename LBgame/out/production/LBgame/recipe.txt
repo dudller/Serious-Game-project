@@ -1,6 +1,4 @@
-eggs
 water
-cocoa
 ******
 2
 3

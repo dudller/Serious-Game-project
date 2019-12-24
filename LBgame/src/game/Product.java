@@ -2,11 +2,11 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+
 
 public class Product extends Entity {
-    Cursor c;
-    String name;
+    Cursor c; //kursor jaki ukarze się po wybraniu produtku
+    String name;//nazwa po której rozpoznajemy produkt
     Game game;
     Toolkit tool = Toolkit.getDefaultToolkit();
     public Product(String n,ImageIcon image, int x, int y, Game game) {

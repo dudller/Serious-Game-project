@@ -22,10 +22,11 @@ public class launcher {
     static int WINDOWWIDTH=1280;
     static int PANELSHIFT=300;//jak dużo szerszy jest panel względem okna
     static int DELAY=50;//opóźnienie renderowania
-    static boolean done =true;
+    //***
     //components
     public Toolkit tool;
     public Recipe recipe;
+    public Game game;
 
 
 
@@ -38,20 +39,22 @@ public class launcher {
         int x =(l.tool.getScreenSize().width-WINDOWWIDTH)/2;
         int y =(l.tool.getScreenSize().height-WINDOWHEIGHT)/2;
         window gameWindow = new window(WINDOWWIDTH,WINDOWHEIGHT,x,y);
-        Game game=new Game(WINDOWWIDTH+PANELSHIFT,WINDOWHEIGHT,l.recipe);
-        gameWindow.add(game);
+        l.game=new Game(WINDOWWIDTH+PANELSHIFT,WINDOWHEIGHT,l.recipe);
+        gameWindow.add(l.game);
         gameWindow.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        game.start();
+        gameWindow.addKeyListener(l.game);
+        l.game.start();
 
 
 
 
     }
+    //wczytanie obrazów
     public void loadImages(){
         background1=new ImageIcon("src/images/bg1.png").getImage();
         background2=new ImageIcon("").getImage();
         menuicon=new ImageIcon("").getImage();
-        mikser=new ImageIcon("src/images/bg1.png").getImage();
+        mikser=new ImageIcon("src/images/mikser.png").getImage();
         cake=new ImageIcon("").getImage();
         bowl=new ImageIcon("").getImage();
         products=new ImageIcon[10];
@@ -70,10 +73,6 @@ public class launcher {
 
 
     }
-
-
-
-
 
 }
 

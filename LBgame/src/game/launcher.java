@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class launcher {
     //images
     public static Image background1;
+    public static Image menubackground;
     public static Image background2;
     public static Image menuicon;
     public static Image mikser;
@@ -48,12 +49,16 @@ public class launcher {
 
 
 
+
+
+
     }
     //wczytanie obrazów
     public void loadImages(){
+
         background1=new ImageIcon("src/images/bg1.png").getImage();
+        menubackground=new ImageIcon("src/images/menu.jpg").getImage();
         background2=new ImageIcon("").getImage();
-        menuicon=new ImageIcon("").getImage();
         mikser=new ImageIcon("src/images/mikser.png").getImage();
         cake=new ImageIcon("").getImage();
         bowl=new ImageIcon("").getImage();

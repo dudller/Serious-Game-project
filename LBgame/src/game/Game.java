@@ -9,11 +9,12 @@ import static java.lang.Double.parseDouble;
 
 
 public class Game extends JPanel implements KeyListener, MouseListener, Runnable {
-    private boolean running=false,produckPicked=false;//zmienne wskazujące na to czy gra trwa i czy wybrano produkt z półki
+    private boolean running,produckPicked=false;//zmienne wskazujące na to czy gra trwa i czy wybrano produkt z półki
     private Product productInHand;//aktualnie "trzymany" produkt
     private Thread thread;
     private int x,y,toX,toY,targetKey,termoX,termoEND; //zmienne parametryczne określające położenia docelowe i aktualne różnych elementów
-    private Recipe recipe;
+    private double menuTime,menuEnter;
+    public Recipe recipe;
     public ArrayList<Product> products;
     public GameState GS;
     public Game(int width,int height, Recipe recipe){
@@ -21,6 +22,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
         setSize(width,height);
         setVisible(true);
         //ustawienie domyślnych wartości ważnych parametrów
+        running=false;
+        menuTime=0;
+        menuEnter=0;
         toY=0;
         toX=0;
         targetKey=65;
@@ -39,15 +43,27 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         switch (GS.task){
             case 3:
                 KeyEvent2(e,targetKey);
+
                 break;
             case 5:
                 KeyEvent3(e);
-                break;
-        }
 
+                break;
+
+        }
+        if (e.getKeyCode()==27) {
+            menuEnter=System.currentTimeMillis();
+            GS.setTask(0);
+        }
+        if (e.getKeyCode()==8) {
+            GS.goToPrewTask();
+            menuTime+=System.currentTimeMillis()-menuEnter;
+            System.out.println(menuTime);
+        }
     }
 
     @Override
@@ -62,6 +78,8 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
                 MouseEvents1(e);
             break;
             case 0:
+                MenuEvents(e);
+                break;
             case 2:
             case 4:
             case 6:
@@ -98,6 +116,9 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         switch (GS.task){
+            case 0:
+                g.drawImage(launcher.menubackground,0,0,null);
+                break;
             case 1:
                 g.drawImage(launcher.background1,0,0,null);
                 for (int i=0; i<10;i++){//rysowanie produktow
@@ -105,12 +126,14 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
                     g.drawImage(products.get(i).image.getImage(),products.get(i).x,products.get(i).y,null);
 
                 }
+                recipe.display(g,27,5,200);
                 break;
-            case 0:
+
             case 2:
             case 4:
                 g.drawImage(launcher.background1,0,0,null);
                 g.drawRect(300,100,200,200);
+                recipe.display(g,27,5,200);
                 break;
             case 3:
                 g.drawImage(launcher.background1,0,0,null);
@@ -118,17 +141,19 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
                 g.setFont(new Font("Helvetica", Font.BOLD, 40));
                 g.drawString(Character.toString((char)targetKey),400,610);
                 g.drawString(Character.toString((char)targetKey+3),645,610);
+                recipe.display(g,27,5,200);
 
                 break;
             case 5:
                 g.drawImage(launcher.background1,0,0,null);
                 g.fillOval(termoX,500,50,50);
+                recipe.display(g,27,5,200);
                 break;
 
 
         }
 
-        recipe.display(g,27,5,200);
+
 
 
     }
@@ -137,7 +162,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
     public void run() {
         while (running){
             long time = System.currentTimeMillis();
-            render();
+            repaint();
             update();
             //czynności mające na celu zapewnienie płynności gry przy różnych warunkach sprzętowych
             time=System.currentTimeMillis()-time;
@@ -163,10 +188,6 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
         running=false;
     }
     //funkcje stanu gry
-    private void render() {
-        repaint();
-
-    }
     private void update()//aktualizuje na bierząco wszystkie ważne zmienne, wpływa na "ruch" elementów w grze
     {
         x=(int)this.getLocation().getX();
@@ -224,8 +245,10 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
             case 6:
                 return false;
         }
-        GS.endtime=System.currentTimeMillis();
+        GS.endtime=System.currentTimeMillis()-menuTime;
         GS.updateScores();
+        menuTime=0;
+        System.out.println(GS.endtime-GS.startTime);
         return true;
     }
     private void MouseEventsNextTask(MouseEvent e)//obsługa myszy dla "zadań" parzystych czyli powiadomień o ukończeniu etapu
@@ -234,6 +257,30 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
         GS.startTime=System.currentTimeMillis();
         System.out.println(GS.pintscores());
     }
+    //funkcje menu
+    private void MenuEvents(MouseEvent e)//obsługa kliknięć w menu
+    {
+        if (e.getX()>400&&e.getX()<600&&e.getY()>10&&e.getY()<140){
+            GS.load(recipe);
+            menuTime=0;
+        }
+        if (e.getX()>400&&e.getX()<600&&e.getY()>150&&e.getY()<340){
+            recipe.reset();
+            menuTime=0;
+            GS.reset();
+        }
+
+
+        if (e.getX()>400&&e.getX()<600&&e.getY()>350&&e.getY()<450){
+            GS.save();
+            GS.goToPrewTask();
+        }
+
+        if (e.getX()>400&&e.getX()<600&&e.getY()>460&&e.getY()<550)
+            System.exit(0);
+
+    }
+
     //funkcje zadania 1 (1) w nawiasie wartość parametru task w GameState
     private void movePanel()//wykonuje przemieszczenie obiektu Canvas do określonych współrzędnych
     {
@@ -365,6 +412,7 @@ public class Game extends JPanel implements KeyListener, MouseListener, Runnable
     {
         if (k.getKeyCode()==32){
             GS.updatePrecision(parseDouble(recipe.temperature),termoX);
+            System.out.println("prec   "+GS.printprec());
             GS.setTask();
 
         }

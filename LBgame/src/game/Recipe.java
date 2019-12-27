@@ -69,6 +69,17 @@ public class Recipe {
         }
 
     }
+    public void reset(){
+        for( String k : products.keySet()){
+            products.put(k,false);
+        }
+        for (String i : mixerSpeed.keySet()){
+           mixerSpeed.put(i,false);
+        }
+        for (String d: decorations.keySet()){
+            decorations.put(d,false);
+        }
+    }
 
     
 }

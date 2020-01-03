@@ -7,26 +7,22 @@ import java.awt.event.ActionListener;
 /** tworzy okno oraz gre, zawiera wszystkie parametry dotyczace ilustracji oraz stalych wartosci */
 public class launcher {
     /**images */
-    public static Image background1;
-    public static Image menubackground;
-    public static Image background2;
-    public static Image mikser;
-    public static Image cake;
-    public static Image bowl;
-    public static Image oven;
+    public static Image background1,menubackground,background2,mikser,cake,bowl,oven,aftertask;
     public static ImageIcon[] products;
     public static ImageIcon[] decorations;
 
     // ***
     //params
     /**wysokosc okna */
-    static int WINDOWHEIGHT=800;
+    final static int WINDOWHEIGHT=800;
     /**szerokosc okna */
-    static int WINDOWWIDTH=1280;
+    final static int WINDOWWIDTH=1280;
     /** o ile pikseli jest wiekszy panel od okna */
-    static int PANELSHIFT=300;
+    final static int PANELSHIFT=300;
     /** opoznienie renderowania */
-    static int DELAY=50;
+    final static int DELAY=50;
+    /** przesuniecie podzialki temperatur piekarnika wzgledem poczatku osi x */
+    final static int OVENSHIFT=405;
     //***
     /**components */
     public Toolkit tool;
@@ -61,12 +57,14 @@ public class launcher {
     public void loadImages(){
 
         background1=new ImageIcon("src/images/bg1.png").getImage();
-        menubackground=new ImageIcon("src/images/menu.jpg").getImage();
+        menubackground=new ImageIcon("src/images/menu.png").getImage();
         background2=background1.getScaledInstance(2000, 1500,  java.awt.Image.SCALE_SMOOTH);
         mikser=new ImageIcon("src/images/mikser.png").getImage();
-        cake=new ImageIcon("").getImage();
-        bowl=new ImageIcon("").getImage();
-        oven=new ImageIcon("").getImage();
+        cake=new ImageIcon("src/images/cake.png").getImage();
+        bowl=new ImageIcon("src/images/bowl.png").getImage();
+        oven=new ImageIcon("src/images/oven.png").getImage();
+        aftertask=new ImageIcon("src/images/aftertask.png").getImage();
+
         products=new ImageIcon[10];
         products[0]=new ImageIcon("src/images/butter.png");
         products[1]=new ImageIcon("src/images/coca.png");
@@ -78,8 +76,10 @@ public class launcher {
         products[7]=new ImageIcon("src/images/salt.png");
         products[8]=new ImageIcon("src/images/sugar.png");
         products[9]=new ImageIcon("src/images/water.png");
-        decorations=new ImageIcon[4];
-        decorations[0]=new ImageIcon("");
+        decorations=new ImageIcon[3];
+        decorations[0]=new ImageIcon("src/images/blueberry.png");
+        decorations[1]=new ImageIcon("src/images/star.png");
+        decorations[1]=new ImageIcon("src/images/strawberry.png");
 
 
     }

@@ -44,9 +44,9 @@ public class GameState {
     public GameState(){
         money=0;
         level=1;
-        task=4;
+        task=1;
         prewiousTask=0;
-        termospeed=20;
+        termospeed=25;
         scores=new Stack();
         precision=new Stack();
 
@@ -198,6 +198,7 @@ public class GameState {
                 }
                 startTime = System.currentTimeMillis();
                 endtime = 0;
+                doStatistics();
             }
         }
         else reset();

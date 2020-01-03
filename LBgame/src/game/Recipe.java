@@ -58,6 +58,7 @@ public class Recipe {
     public void display(Graphics g,int fontSize ,int x,int y){
         int n=0;
         g.setFont(new Font("Helvetica", Font.PLAIN, fontSize));
+        g.setColor(Color.BLACK);
         g.drawString("Ingredients:",x,y+fontSize*n++ );
         String text;
         for( String k : products.keySet()){

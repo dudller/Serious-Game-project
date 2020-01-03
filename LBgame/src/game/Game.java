@@ -39,6 +39,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     public ArrayList<Point> cutPoints;
     /** obiekt klasy Gamestate nadzoruje przebieg gry i zapisuje wyniki */
     public GameState GS;
+    /** informuje czy proces ciecia w zadaniu 4 zostal uczciwie rozpoczety */
+    private boolean properCut=false;
     /** ustawienie domyslnych wlasciwosci parametrow, przypisanie przepisu oraz uimeszczenie panelu w oknie gry
      * @param height wysokosc panelu
      * @param width szerokosc panelu
@@ -54,8 +56,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
         toY = 0;
         toX = 0;
         targetKey = 65;
-        termoX = 100;
-        termoEND = 300;
+        termoX = launcher.OVENSHIFT;
+        termoEND = launcher.OVENSHIFT+525;
         products = new ArrayList();
         cutPoints= new ArrayList();
         initComponents();
@@ -120,11 +122,14 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
 
 
         }
+        if (GS.task!=0&&e.getX()<300 && e.getY()<130) GS.setTask(0);
     }
 
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (e.getX()<410) properCut=true;
+        else properCut=false;
 
     }
 
@@ -148,12 +153,11 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     /** tylko dla zadania 4 dodaje punkty pozycji myszy do listy cutPionts oraz wywoluje funcje aktualizacji wykikow i przejscia do nastepnego zadania */
     public void mouseDragged(MouseEvent e) {
         if (GS.task == 7) {
-
-            if (e.getX()>400&&e.getX()<600&&e.getY()>500&&e.getY()<800){
+            if (properCut&&e.getX()>400&&e.getX()<1000&&e.getY()>500&&e.getY()<800){
                     cutPoints.add(e.getPoint());
             }
 
-            if (e.getX()>599&&cutPoints.size()>10){
+            if (e.getX()>999&&cutPoints.size()>10){
                 double score=0;
                 int counter=0;
                 for (Point i :cutPoints)
@@ -186,6 +190,7 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 break;
             case 1:
                 g.drawImage(launcher.background1, 0, 0, null);
+                g.drawImage(launcher.bowl, 325, 50, null);
                 for (int i = 0; i < 10; i++) {//rysowanie produktow
 
                     g.drawImage(products.get(i).image.getImage(), products.get(i).x, products.get(i).y, null);
@@ -199,16 +204,16 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
             case 6:
             case 8:
                 g.drawImage(launcher.background1, 0, 0, null);
-                g.drawRect(300, 100, 200, 200);
+                g.drawImage(launcher.aftertask,300,150,null);
                 recipe.display(g, 27, 5, 200);
                 if(showdetails) {
                     g.setFont(new Font("Helvetica", Font.PLAIN, 36));
-                    g.drawString("Average response time:" +GS.avgScore + "ms",500,400);
-                    g.drawString("Averge precision: " + GS.avgPrecision,500,450);
+                    g.drawString("Average response time:" +GS.avgScore + "ms",500,410);
+                    g.drawString("Averge precision: " + GS.avgPrecision,500,460);
                     //rysowanie wykresow
                     Graphics2D g2 = (Graphics2D) g;
-                    GS.chart1.draw(g2, new Rectangle(300, 500, 400, 300));
-                    GS.chart2.draw(g2, new Rectangle(700, 500, 400, 300));
+                    GS.chart1.draw(g2, new Rectangle(310, 500, 400, 300));
+                    GS.chart2.draw(g2, new Rectangle(710, 500, 400, 300));
                 }
 
 
@@ -223,13 +228,19 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
 
                 break;
             case 5:
+                g.setColor(Color.BLUE);
                 g.drawImage(launcher.background1, 0, 0, null);
-                g.fillOval(termoX, 500, 50, 50);
+                g.drawImage(launcher.oven, 315, 0, null);
+                g.fillOval(termoX, 250, 10, 50);
+                g.setColor(Color.pink);
+                g.fillOval(launcher.OVENSHIFT+(Integer.parseInt(recipe.temperature))*21/10, 250, 10, 50); //2.1 to skala  temperatury do pikselami
+                //jesli mamy temperature 10 stopni to zeby dobrze ja wyswietlic mnozymy razy 2.1 px
                 recipe.display(g, 27, 5, 200);
                 break;
             case 7:
                 g.drawImage(launcher.background1, 0, 0, null);
-                g.drawRect(400,500,200,300);
+                g.drawImage(launcher.cake, 400, 500, null);
+
                 Point i = new Point(400,650); //wcześniejszy punkt
                 g.setColor(Color.WHITE);
                 if (cutPoints!=null){
@@ -238,9 +249,11 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                         i.setLocation(j.x,j.y);
                     }}
                 g.setColor(Color.BLUE);
-                g.drawLine(400,650,600,650);
-                g.setColor(Color.BLACK);
+                g.drawLine(400,650,1000,650);
                 recipe.display(g, 27, 5, 200);
+                break;
+            case 9:
+                g.drawImage(launcher.background2, 0, 0, null);
                 break;
         }
         g.setColor(Color.BLACK);
@@ -304,8 +317,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 if (termoX == termoEND) {
                     GS.termospeed = -GS.termospeed;
                     if (GS.termospeed > 0)
-                        termoEND = 300; //docelowy punkt x przy przemieszczeniu w prawo
-                    else termoEND = 0; //w lewo
+                        termoEND = 525+launcher.OVENSHIFT; //docelowy punkt x przy przemieszczeniu w prawo
+                    else termoEND = launcher.OVENSHIFT; //w lewo
                 }
                 break;
 
@@ -349,9 +362,9 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     /**obsluga myszy dla "zadan" parzystych czyli powiadomien o ukonczeniu etapu*/
     private void MouseEventsNextTask(MouseEvent e)
     {
-        if (e.getX() > 300 && e.getX() < 500 && e.getY() > 100 && e.getY() < 300) GS.setTask();
+        if (e.getX() > 350 && e.getX() < 600 && e.getY() > 200 && e.getY() < 370) GS.setTask();
         GS.startTime = System.currentTimeMillis();
-        if (e.getX() > 600 && e.getX() < 800 && e.getY() > 100 && e.getY() < 300) showdetails=!showdetails;
+        if (e.getX() > 820 && e.getX() < 1070 && e.getY() > 200 && e.getY() < 370) showdetails=!showdetails;
     }
 
 
@@ -359,26 +372,29 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     /**obsluga klikniec w menu*/
     private void MenuEvents(MouseEvent e)
     {
-        if (e.getX() > 400 && e.getX() < 600 && e.getY() > 10 && e.getY() < 140) {
+        int buttonh=125;
+        int buttonw=120;
+        int n=1;
+        if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() > 30 && e.getY() < 30+buttonh*n++) {
             GS.goToPrewTask();
         }
-        if (e.getX() > 400 && e.getX() < 600 && e.getY() > 150 && e.getY() < 290) {
-            GS.load(recipe);
-            menuTime = 0;
-        }
-        if (e.getX() > 400 && e.getX() < 600 && e.getY() > 300 && e.getY() < 440) {
+
+        if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() >  20*(n-1)+30+buttonh*(n-1) && e.getY() < 20*n+30+buttonh*n++) {
             recipe.reset();
             menuTime = 0;
             GS.reset();
         }
+        if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() >  20*(n-1)+30+buttonh*(n-1) && e.getY() < 20*n+30+buttonh*n++) {
+            GS.load(recipe);
+            menuTime = 0;
+        }
 
-
-        if (e.getX() > 400 && e.getX() < 600 && e.getY() > 450 && e.getY() < 590) {
+        if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() >  20*(n-1)+30+buttonh*(n-1) && e.getY() < 20*n+30+buttonh*n++) {
             GS.save();
             GS.goToPrewTask();
         }
 
-        if (e.getX() > 400 && e.getX() < 600 && e.getY() > 600 && e.getY() < 750)
+        if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() >  20*(n-1)+30+buttonh*(n-1) && e.getY() < 20*n+30+buttonh*n++)
             System.exit(0);
 
     }
@@ -517,12 +533,14 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     /**obsluga zatrzymania wskaznika temperatury*/
     private void KeyEvent3(KeyEvent k){
         if (k.getKeyCode() == 32) {
-            GS.updatePrecision(parseDouble(recipe.temperature), termoX);
+            GS.updatePrecision(parseDouble(recipe.temperature), (termoX-launcher.OVENSHIFT)/2.1); //21 poniewaz podzialka na piekarniku ma 21 px
             System.out.println("prec   " + GS.printprec());
             GS.setTask();
 
         }
     }
+    //funkcje zadania 5 (9)
+
 }
 
 

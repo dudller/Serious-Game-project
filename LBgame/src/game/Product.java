@@ -29,12 +29,12 @@ public class Product extends Entity {
     public void setposition(){
         int i = game.products.indexOf(this);
         if (i<5){
-            x=1285;
-            y=20+(140*i);
+            x=1265;
+            y=10+(140*i);
         }
         else {
-            x=1285+151;
-            y=20+(140*(i-5));
+            x=1265+150;
+            y=10+(140*(i-5));
         }
 
 

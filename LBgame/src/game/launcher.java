@@ -4,34 +4,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/** tworzy okno oraz gre, zawiera wszystkie parametry dotyczace ilustracji oraz stalych wartosci */
 public class launcher {
-    //images
+    /**images */
     public static Image background1;
     public static Image menubackground;
     public static Image background2;
-    public static Image menuicon;
     public static Image mikser;
     public static Image cake;
     public static Image bowl;
+    public static Image oven;
     public static ImageIcon[] products;
     public static ImageIcon[] decorations;
 
     // ***
     //params
+    /**wysokosc okna */
     static int WINDOWHEIGHT=800;
+    /**szerokosc okna */
     static int WINDOWWIDTH=1280;
-    static int PANELSHIFT=300;//jak dużo szerszy jest panel względem okna
-    static int DELAY=50;//opóźnienie renderowania
+    /** o ile pikseli jest wiekszy panel od okna */
+    static int PANELSHIFT=300;
+    /** opoznienie renderowania */
+    static int DELAY=50;
     //***
-    //components
+    /**components */
     public Toolkit tool;
     public Recipe recipe;
     public Game game;
 
 
 
-
+    /** funkcja glowna odpowiada za rozruch programu tworzy wszystkie niezbedne elementy */
     public static void main(String[] args) {
         launcher l=new launcher();
         l.recipe=new Recipe();
@@ -53,15 +57,16 @@ public class launcher {
 
 
     }
-    //wczytanie obrazów
+    /** wczytuje obrazu z plikow */
     public void loadImages(){
 
         background1=new ImageIcon("src/images/bg1.png").getImage();
         menubackground=new ImageIcon("src/images/menu.jpg").getImage();
-        background2=new ImageIcon("").getImage();
+        background2=background1.getScaledInstance(2000, 1500,  java.awt.Image.SCALE_SMOOTH);
         mikser=new ImageIcon("src/images/mikser.png").getImage();
         cake=new ImageIcon("").getImage();
         bowl=new ImageIcon("").getImage();
+        oven=new ImageIcon("").getImage();
         products=new ImageIcon[10];
         products[0]=new ImageIcon("src/images/butter.png");
         products[1]=new ImageIcon("src/images/coca.png");

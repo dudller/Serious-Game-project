@@ -2,7 +2,7 @@ package game;
 
 import javax.swing.*;
 
-
+/** baza dla klas ktore wymagaja operacji na wspolrzednych oraz ich obiekty maja byc wyswietlane*/
  public abstract class Entity {
     public ImageIcon image;
     public int x,y;

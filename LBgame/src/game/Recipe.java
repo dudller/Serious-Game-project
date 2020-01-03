@@ -5,11 +5,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Hashtable;
 
+/** klasa obslugujaca obiekty przedstawiajace przepis wyswietlany i modyfikowany w trakcie gry */
 public class Recipe {
-    public Hashtable<String,Boolean> products; //tablica zwierająca wszystkie produkty które trzeba umieścić w miesce zadanie 1
-    public Hashtable<String,Boolean> mixerSpeed;//tablica zawierająca prędkości miksera jakie muszą zostać użyte
-    public String temperature;//temperatura docelowa piekarnika
-    public Hashtable<String,Boolean> decorations;//tablica zawierająca wszystkie dekoracje które trzeba umieścić w zadaniu 5
+    /**obiekt Hashtable zwierajacy wszystkie produkty ktore trzeba umiescic w misce w zadaniu 1*/
+    public Hashtable<String,Boolean> products;
+    /**obiekt Hashtable zawierajacy prędkosci miksera jakie musza zostac uzyte w zadaniu 2*/
+    public Hashtable<String,Boolean> mixerSpeed;
+    /** przechowuje docelowa temperature piekarnika */
+    public String temperature;
+    /**obiekt Hashtable zawierajacy wszystkie dekoracje ktore trzeba umiescic w zadaniu 5*/
+    public Hashtable<String,Boolean> decorations;
+    /** tworzy obiekty Hashtable oraz pobiera dane z pliku txt jesli takowy istnieje */
     public Recipe(){
         products=new Hashtable<String,Boolean>();
         mixerSpeed=new Hashtable<String,Boolean>();
@@ -32,7 +38,9 @@ public class Recipe {
             fin.close();
         }catch(Exception e){System.out.println(e);}
     }
-    //zmiana aktywnej tabeli do której przypisywane są dane
+    /**zmiana aktywnej tabeli do ktorej przypisywane sa dane
+     * @param i licznik sekwencji sygnalizujacej koniecznosc zmiany tabeli danych
+     * @return zwraca kolejny obiekt Hashtable do ktorego beda wpisywane dane lub w przypadku gdy wlasnie wypelnil ostatnia tabele zwraca null*/
     private Hashtable setTable(int i){
         if (i==1){
             return mixerSpeed;
@@ -42,7 +50,11 @@ public class Recipe {
         }
         else return null;
     }
-    //wyświetlane przepisu według określonego układu
+    /**wyswietla przepis wedlug okreslonego ukladu
+     * @param x wspolrzedna x lewego gornego rogu obszaru przepisu
+     * @param y wspolrzedna y lewego gornego rogu obszaru przepisu
+     * @param fontSize rozmiar czcionki wyswietlanego przepisu
+     * @param g obiegk Graphics wykorzystywany do rysowania*/
     public void display(Graphics g,int fontSize ,int x,int y){
         int n=0;
         g.setFont(new Font("Helvetica", Font.PLAIN, fontSize));
@@ -69,6 +81,7 @@ public class Recipe {
         }
 
     }
+    /** ustawia wartosc Value jako false we wszystkich obiektach Hashtable */
     public void reset(){
         for( String k : products.keySet()){
             products.put(k,false);

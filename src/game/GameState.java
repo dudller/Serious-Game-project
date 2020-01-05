@@ -42,7 +42,7 @@ public class GameState {
         level=1;
         task=0;
         prewiousTask=0;
-        termospeed=25;
+        termospeed=10;
         scores=new Stack<>();
         precision=new Stack<>();
 
@@ -196,8 +196,8 @@ public class GameState {
     /**zwiekszenie poziomu i modyfikacja parametrow z nim zwiazanych*/
     public void levelUp(){
         level++;
-        termospeed+=termospeed+10*level;
-        if (termospeed>60) termospeed=65;
+        termospeed+=termospeed+2*(level-1);
+        if (termospeed>20) termospeed=25;
         task=1;
         prewiousTask=1;
 

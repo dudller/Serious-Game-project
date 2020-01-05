@@ -73,7 +73,7 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
         addMouseListener(this);//dodany dla obiektu Game poniewaz dziedziczy on z Jpanel a w zalozeniu mechaniki gry operujemy na wspolrzednych panelu a nie okna
         addMouseMotionListener(this);
         GS = new GameState();
-        pattern=new Pattern(launcher.patternElements[0],launcher.patternElements[1],launcher.patternElements[2],500,395,300,500,this);
+        pattern=new Pattern(launcher.patternElements[0],launcher.patternElements[1],launcher.patternElements[2],525,420,250,450,this);
         ChartPanel chartPanel = new ChartPanel(GS.chart1);
         add(chartPanel);
         soundGood=new Sound("src/audio/good.wav");
@@ -218,7 +218,7 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 g.drawImage(launcher.background1, 0, 0, null);
                 g.setFont(new Font("Helvetica", Font.PLAIN, 30));
                 g.drawString("Place products from recipe to a bowl",350,50);
-                g.drawString("You'll find all products while u click right panel",350,100);
+                g.drawString("To find all products click right panel",350,100);
 
                 g.drawImage(launcher.bowl, 450, 500, null);
                 for (int i = 0; i < 10; i++) {//rysowanie produktow
@@ -239,8 +239,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 recipe.display(g, 27, 5, 200);
                 if(showdetails) {
                     g.setFont(new Font("Helvetica", Font.PLAIN, 36));
-                    g.drawString("Average response time:" +GS.avgScore + "s",350,410);
-                    g.drawString("Averge precision: " + GS.avgPrecision,350,460);
+                    g.drawString("Average response time:" +String.format("%.2f",GS.avgScore) + "s",350,410);
+                    g.drawString("Averge precision: " + String.format("%.2f",GS.avgPrecision),350,460);
                     //rysowanie wykresow
                     Graphics2D g2 = (Graphics2D) g;
                     GS.chart1.draw(g2, new Rectangle(310, 480, 400, 300));
@@ -277,6 +277,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 g.setFont(new Font("Helvetica", Font.PLAIN, 30));
                 g.drawString("Slice the cake by pressing mouse button",350,50);
                 g.drawString("Try to slice as close to blue line as it's possible",350,100);
+                g.setColor(Color.BLUE);
+                g.drawLine(400,650,1000,650);
                 Point i = new Point(400,650); //wcześniejszy punkt
                 g.setColor(Color.WHITE);
                 if (cutPoints!=null){
@@ -284,8 +286,7 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                         g.drawLine(i.x,i.y,j.x,j.y);
                         i.setLocation(j.x,j.y);
                     }}
-                g.setColor(Color.BLUE);
-                g.drawLine(400,650,1000,650);
+
                 recipe.display(g, 27, 5, 200);
                 break;
             case 9:
@@ -304,8 +305,8 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
                 g.setFont(new Font("Helvetica", Font.PLAIN, 36));
                 g.drawString("Congratulations! Level " + GS.level + " complete",350,200);
                 if(showdetails) {
-                    g.drawString("Average response time:" +GS.avgScore + "s",350,410);
-                    g.drawString("Averge precision: " + GS.avgPrecision,500,460);
+                    g.drawString("Average response time:" +String.format("%.2f",GS.avgScore) + "s",350,410);
+                    g.drawString("Averge precision: " + String.format("%.2f",GS.avgPrecision),350,460);
                     //rysowanie wykresow
                     Graphics2D g2 = (Graphics2D) g;
                     GS.chart1.draw(g2, new Rectangle(310, 480, 400, 300));
@@ -445,7 +446,7 @@ public class Game extends JPanel implements KeyListener, MouseListener,MouseMoti
     private void MenuEvents(MouseEvent e)
     {
         int buttonh=125;
-        int buttonw=120;
+        int buttonw=450;
         int n=1;
         if (e.getX() > 420 && e.getX() < 420+buttonw && e.getY() > 30 && e.getY() < 30+buttonh*n++) {
             GS.goToPrewTask();

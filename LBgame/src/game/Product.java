@@ -5,13 +5,12 @@ import java.awt.*;
 
 
 /**opisuje wszystkie produkty wystepujace w pierwszym zadaniu*/
-public class Product extends Entity {
+public class Product extends Decoration {
     /**kursor jaki ukarze sie po wybraniu produtku*/
-    Cursor c;
+    public Cursor c;
     /**nazwa produktu*/
-    String name;
     /**obiekt gry w ktorym sa umieszczone produkty*/
-    Game game;
+    private Game game;
     /** konstruktor ustawia podstawowe parametry
      * @param n nazwa
      * @param image  obraz konkretnego produktu
@@ -19,8 +18,7 @@ public class Product extends Entity {
      * @param y wspolrzedna
      * @param game obiekt gry */
     public Product(String n,ImageIcon image, int x, int y, Game game) {
-        super(image, x, y);
-        this.name=n;
+        super(n,image, x, y);
         this.game=game;
         c=Toolkit.getDefaultToolkit().createCustomCursor(this.image.getImage().getScaledInstance(32, 32,  java.awt.Image.SCALE_SMOOTH),new Point(15,20) , name);
         this.game.products.add(this);

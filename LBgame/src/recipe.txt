@@ -1,9 +1,13 @@
 water
+milk
+butter
+flour
+powder
 ******
 2
 3
 ******
-strawberies
-chocolate stars
+strawberry
+blueberry
 ******
-240
+190

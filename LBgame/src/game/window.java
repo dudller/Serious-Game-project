@@ -9,8 +9,11 @@ public class window extends JFrame {
 
         setSize(width,height);
         setLocation(x,y);
+        setUndecorated(true);
         setVisible(true);
         setResizable(false);
+
+
 
     }
 

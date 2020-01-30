@@ -6,16 +6,12 @@ import java.io.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
-import javax.imageio.IIOException;
-import javax.swing.*;
 import java.util.Stack;
 /** odpowiada za zapis oraz interpretacje wynikow gracza */
 public class GameState {
@@ -44,11 +40,11 @@ public class GameState {
     public GameState(){
         money=0;
         level=1;
-        task=1;
+        task=-1;
         prewiousTask=0;
-        termospeed=25;
-        scores=new Stack();
-        precision=new Stack();
+        termospeed=10;
+        scores=new Stack<>();
+        precision=new Stack<>();
 
     }
     /** zwieksza zmienna task o 1 oraz zapisuje poprzednio wykonywane zadanie*/
@@ -88,7 +84,7 @@ public class GameState {
                 BufferedWriter br = new BufferedWriter(fout);
                 while (!scores.isEmpty()) {
                     if (scoreCounter>10) break;
-                    br.write(Double.toString(scores.pop()) + "\n");
+                    br.write(scores.pop() + "\n");
                     scoreCounter++;
                 }
                 br.close();
@@ -101,7 +97,7 @@ public class GameState {
                 BufferedWriter br2 = new BufferedWriter(fout2);
                 while (!precision.isEmpty()) {
                     if (scoreCounter>20) break;
-                    br2.write(Double.toString(precision.pop()) + "\n");
+                    br2.write(precision.pop() + "\n");
                     scoreCounter++;
                 }
                 br2.close();
@@ -112,9 +108,9 @@ public class GameState {
             try {
                 FileWriter fout3 = new FileWriter("src/state.txt");
                 BufferedWriter br3 = new BufferedWriter(fout3);
-                br3.write(Integer.toString(level)+"\n");
-                br3.write(Integer.toString(prewiousTask)+"\n");
-                br3.write(Integer.toString(money)+"\n");
+                br3.write(level +"\n");
+                br3.write(prewiousTask +"\n");
+                br3.write(money +"\n");
                 br3.close();
                 fout3.close();
             } catch (Exception e) {
@@ -140,7 +136,7 @@ public class GameState {
             while (!buffer.isEmpty()){
                 scores.push(Double.parseDouble(buffer.pop()));
             }
-        }catch(Exception e){System.out.println(e); errorOccured=true;}
+        }catch(Exception e){errorOccured=true;}
         try{
             FileReader fin2=new FileReader("src/precision.txt");
             BufferedReader br2=new BufferedReader(fin2);
@@ -153,7 +149,7 @@ public class GameState {
             while (!buffer.isEmpty()){
                 precision.push(Double.parseDouble(buffer.pop()));
             }
-        }catch(Exception e){System.out.println(e);errorOccured=true;}
+        }catch(Exception e){errorOccured=true;}
         try{
             FileReader fin3=new FileReader("src/state.txt");
             BufferedReader br3=new BufferedReader(fin3);
@@ -163,30 +159,22 @@ public class GameState {
             prewiousTask=task;
             br3.close();
             fin3.close();
-        }catch(Exception e){System.out.println(e);errorOccured=true;}
+        }catch(Exception e){errorOccured=true;}
         //przywrócenie postępu widocznego na przepisie
         if (!errorOccured){
             int remake=task;
             while (remake!=0) {
                 switch (remake) {
                     case 2:
-                        for (String i : r.products.keySet()) {
-                            System.out.println("done1");
-                            r.products.put(i, true);
-                        }
+                        r.products.replaceAll((i, v) -> true);
                         remake--;
                         break;
                     case 4:
-                        for (String j : r.mixerSpeed.keySet()) {
-                            System.out.println("done2");
-                            r.mixerSpeed.put(j, true);
-                        }
+                        r.mixerSpeed.replaceAll((j, v) -> true);
                         remake--;
                         break;
                     case 6:
-                        for (String k : r.decorations.keySet()) {
-                            r.decorations.put(k, true);
-                        }
+                        r.decorations.replaceAll((k, v) -> true);
                         remake--;
                         break;
                     case 1:
@@ -208,18 +196,17 @@ public class GameState {
     /**zwiekszenie poziomu i modyfikacja parametrow z nim zwiazanych*/
     public void levelUp(){
         level++;
-        termospeed+=termospeed*level/5;
+        termospeed+=termospeed+2*(level-1);
+        if (termospeed>20) termospeed=25;
         task=1;
         prewiousTask=1;
+
     }
     /**dodanie wynikow czasowych do stosu oraz przeliczenie ich na wartosc zarobionych pieniedzy*/
     public void updateScores(){
         scores.push(endtime-startTime);
         money+=1/(endtime-startTime)*100000/level;
         doStatistics();
-    }
-    public Stack pintscores(){
-        return scores;
     }
     public Stack printprec(){return precision;}
 
@@ -257,6 +244,7 @@ public class GameState {
             if (counter>10)break;
         }
         avgScore/=counter;//obliczenie średniej
+        avgScore/=1000;//zeby bylo w sekundach
         buffstack=(Stack)precision.clone();
         counter=0;
         while (!buffstack.isEmpty()){

@@ -3,30 +3,32 @@ package game;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Hashtable;
+import java.util.HashMap;
+
+import java.util.Map;
 
 /** klasa obslugujaca obiekty przedstawiajace przepis wyswietlany i modyfikowany w trakcie gry */
 public class Recipe {
-    /**obiekt Hashtable zwierajacy wszystkie produkty ktore trzeba umiescic w misce w zadaniu 1*/
-    public Hashtable<String,Boolean> products;
-    /**obiekt Hashtable zawierajacy prędkosci miksera jakie musza zostac uzyte w zadaniu 2*/
-    public Hashtable<String,Boolean> mixerSpeed;
+    /**obiekt Map zwierajacy wszystkie produkty ktore trzeba umiescic w misce w zadaniu 1*/
+    public Map<String,Boolean> products;
+    /**obiekt Map zawierajacy prędkosci miksera jakie musza zostac uzyte w zadaniu 2*/
+    public Map<String,Boolean> mixerSpeed;
     /** przechowuje docelowa temperature piekarnika */
     public String temperature;
-    /**obiekt Hashtable zawierajacy wszystkie dekoracje ktore trzeba umiescic w zadaniu 5*/
-    public Hashtable<String,Boolean> decorations;
-    /** tworzy obiekty Hashtable oraz pobiera dane z pliku txt jesli takowy istnieje */
+    /**obiekt Map zawierajacy wszystkie dekoracje ktore trzeba umiescic w zadaniu 5*/
+    public Map<String,Boolean> decorations;
+    /** tworzy obiekty Map oraz pobiera dane z pliku txt jesli takowy istnieje */
     public Recipe(){
-        products=new Hashtable<String,Boolean>();
-        mixerSpeed=new Hashtable<String,Boolean>();
-        decorations=new Hashtable<String,Boolean>();
+        products=new HashMap<String,Boolean>();
+        mixerSpeed=new HashMap<String,Boolean>();
+        decorations=new HashMap<>();
         //pobranie przepisu z pliku
         try{
             FileReader fin=new FileReader("src/recipe.txt");
             String s = "";
             BufferedReader br=new BufferedReader(fin);
             int  i =1;
-            Hashtable current=products; //aktualna tablica do której wpisujemy dane z pliku txt
+            Map current=products; //aktualna tablica do której wpisujemy dane z pliku txt
             while((s=br.readLine())!= null){
                 if (current!=null) {
                     if (s.equals("******")) current = setTable(i++); //wystąpienie w pliku linii ****** powoduje przełączenie tabeli wpisywania
@@ -40,8 +42,8 @@ public class Recipe {
     }
     /**zmiana aktywnej tabeli do ktorej przypisywane sa dane
      * @param i licznik sekwencji sygnalizujacej koniecznosc zmiany tabeli danych
-     * @return zwraca kolejny obiekt Hashtable do ktorego beda wpisywane dane lub w przypadku gdy wlasnie wypelnil ostatnia tabele zwraca null*/
-    private Hashtable setTable(int i){
+     * @return zwraca kolejny obiekt Map do ktorego beda wpisywane dane lub w przypadku gdy wlasnie wypelnil ostatnia tabele zwraca null*/
+    private Map setTable(int i){
         if (i==1){
             return mixerSpeed;
         }
@@ -82,7 +84,7 @@ public class Recipe {
         }
 
     }
-    /** ustawia wartosc Value jako false we wszystkich obiektach Hashtable */
+    /** ustawia wartosc Value jako false we wszystkich obiektach Hashmap */
     public void reset(){
         for( String k : products.keySet()){
             products.put(k,false);

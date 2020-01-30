@@ -2,21 +2,23 @@ package game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+
 /** tworzy okno oraz gre, zawiera wszystkie parametry dotyczace ilustracji oraz stalych wartosci */
 public class launcher {
     /**images */
-    public static Image background1,menubackground,background2,mikser,cake,bowl,oven,aftertask;
+    public static Image background1,menubackground,background2,mikser,cake,bowl,oven,aftertask,title;
     public static ImageIcon[] products;
-    public static ImageIcon[] decorations;
+    public static Map<String,ImageIcon> decorations;
+    public static ImageIcon[] patternElements;
 
     // ***
     //params
     /**wysokosc okna */
     final static int WINDOWHEIGHT=800;
     /**szerokosc okna */
-    final static int WINDOWWIDTH=1280;
+    final static int WINDOWWIDTH=1265;
     /** o ile pikseli jest wiekszy panel od okna */
     final static int PANELSHIFT=300;
     /** opoznienie renderowania */
@@ -37,6 +39,7 @@ public class launcher {
         l.recipe=new Recipe();
         l.loadImages();
         l.tool=Toolkit.getDefaultToolkit();
+        //wysrodkowanie okna
         int x =(l.tool.getScreenSize().width-WINDOWWIDTH)/2;
         int y =(l.tool.getScreenSize().height-WINDOWHEIGHT)/2;
         window gameWindow = new window(WINDOWWIDTH,WINDOWHEIGHT,x,y);
@@ -55,10 +58,10 @@ public class launcher {
     }
     /** wczytuje obrazu z plikow */
     public void loadImages(){
-
+        title=new ImageIcon("src/images/title.png").getImage();
         background1=new ImageIcon("src/images/bg1.png").getImage();
         menubackground=new ImageIcon("src/images/menu.png").getImage();
-        background2=background1.getScaledInstance(2000, 1500,  java.awt.Image.SCALE_SMOOTH);
+        background2=new ImageIcon("src/images/bg2.png").getImage();
         mikser=new ImageIcon("src/images/mikser.png").getImage();
         cake=new ImageIcon("src/images/cake.png").getImage();
         bowl=new ImageIcon("src/images/bowl.png").getImage();
@@ -76,10 +79,14 @@ public class launcher {
         products[7]=new ImageIcon("src/images/salt.png");
         products[8]=new ImageIcon("src/images/sugar.png");
         products[9]=new ImageIcon("src/images/water.png");
-        decorations=new ImageIcon[3];
-        decorations[0]=new ImageIcon("src/images/blueberry.png");
-        decorations[1]=new ImageIcon("src/images/star.png");
-        decorations[1]=new ImageIcon("src/images/strawberry.png");
+        decorations=new HashMap();
+        decorations.put("strawberry",new ImageIcon("src/images/strawberry.png"));
+        decorations.put("blueberry",new ImageIcon("src/images/blueberry.png"));
+        decorations.put("star",new ImageIcon("src/images/star.png"));
+        patternElements=new ImageIcon[3];
+        patternElements[0]=new ImageIcon("src/images/patternbb.png");
+        patternElements[1]=new ImageIcon("src/images/patternsb.png");
+        patternElements[2]=new ImageIcon("src/images/patternstar.png");
 
 
     }
